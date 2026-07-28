@@ -1,17 +1,11 @@
 package com.leandro.shop.auth;
 
 import com.leandro.shop.shared.payload.ApiResponse;
-import com.leandro.shop.user.dto.UserLoginRequest;
-import com.leandro.shop.user.dto.UserLoginResponse;
-import com.leandro.shop.user.dto.UserRegistrationRequest;
-import com.leandro.shop.user.dto.UserRegistrationResponse;
+import com.leandro.shop.user.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -38,5 +32,12 @@ public class AuthController {
             ApiResponse.success("Login success", authService.loginUser(request)));
     }
 
+    @PatchMapping("/password")
+    public ResponseEntity<Void> updatePassword(
+            @Valid @RequestBody UserChangePasswordRequest request
+            ){
+        authService.updatePassword(request);
+        return ResponseEntity.noContent().build();
+    }
 
 }

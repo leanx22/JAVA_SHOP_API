@@ -6,12 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -74,25 +70,4 @@ public class User implements UserDetails {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.status != AccountStatus.BANNED;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.status != AccountStatus.DELETED;
-    }
 }

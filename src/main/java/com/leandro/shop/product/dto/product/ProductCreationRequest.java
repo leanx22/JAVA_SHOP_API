@@ -1,6 +1,5 @@
-package com.leandro.shop.product.dto;
+package com.leandro.shop.product.dto.product;
 
-import com.leandro.shop.user.entity.User;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;

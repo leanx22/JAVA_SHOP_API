@@ -1,7 +1,7 @@
 package com.leandro.shop.product.controller;
 
-import com.leandro.shop.product.dto.ProductCreationRequest;
-import com.leandro.shop.product.dto.ProductResponse;
+import com.leandro.shop.product.dto.product.ProductCreationRequest;
+import com.leandro.shop.product.dto.product.ProductResponse;
 import com.leandro.shop.product.service.ProductService;
 import com.leandro.shop.shared.payload.ApiResponse;
 import com.leandro.shop.shared.payload.PageResponse;
@@ -42,14 +42,30 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<ProductResponse>>> getAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search
     ){
         return ResponseEntity.ok(
                 ApiResponse.success(
                         "Products retrieved successfully",
-                        productService.getAllProducts(page, size)
+                        productService.getPublicProducts(page, size, search)
                 )
         );
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<PageResponse<ProductResponse>>> getCurrentUserProducts(
+             @RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size
+    ){
+         return ResponseEntity.ok(
+                 ApiResponse.success(
+                         "Products retrieved successfully",
+                         productService.getCurrentUserProducts(page, size)
+                 )
+         );
+    }
+
+    //TODO update y delete
 
 }

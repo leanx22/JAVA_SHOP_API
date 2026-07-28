@@ -1,6 +1,7 @@
 package com.leandro.shop.user.service;
 
 import com.leandro.shop.shared.exceptions.*;
+import com.leandro.shop.shared.security.CustomUserDetails;
 import com.leandro.shop.user.dto.*;
 import com.leandro.shop.user.entity.AccountStatus;
 import com.leandro.shop.user.entity.User;
@@ -106,14 +107,13 @@ public class UserService {
 
     private User getAuthenticatedUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth == null || !(auth.getPrincipal() instanceof String userIdStr)){
+        if(auth == null || auth.getPrincipal() == null){
             throw new UnauthorizedException("Invalid authentication context");
         }
 
-        UUID userUUID = UUID.fromString(userIdStr);
-        return userRepository.findById(userUUID).orElseThrow(
-                ()->new ResourceNotFoundException("User id "+userIdStr+" not found")
-        );
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        return userDetails.getUser();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.leandro.shop.product.mapper;
 
-import com.leandro.shop.product.dto.ProductCreationRequest;
-import com.leandro.shop.product.dto.ProductResponse;
+import com.leandro.shop.product.dto.product.ProductCreationRequest;
+import com.leandro.shop.product.dto.product.ProductResponse;
 import com.leandro.shop.product.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
