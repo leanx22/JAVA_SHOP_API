@@ -1,7 +1,7 @@
 package com.leandro.shop.auth;
 
 import com.leandro.shop.shared.exceptions.*;
-import com.leandro.shop.shared.security.CustomUserDetails;
+import com.leandro.shop.shared.security.user.CustomUserDetails;
 import com.leandro.shop.user.dto.*;
 import com.leandro.shop.user.entity.AccountStatus;
 import com.leandro.shop.user.entity.User;
@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

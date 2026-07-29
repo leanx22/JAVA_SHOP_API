@@ -1,19 +1,15 @@
 package com.leandro.shop.user.service;
 
 import com.leandro.shop.shared.exceptions.*;
-import com.leandro.shop.shared.security.CustomUserDetails;
 import com.leandro.shop.user.dto.*;
 import com.leandro.shop.user.entity.AccountStatus;
 import com.leandro.shop.user.entity.User;
 import com.leandro.shop.user.mapper.UserMapper;
 import com.leandro.shop.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -28,14 +24,11 @@ public class UserService {
 
 
     // PROFILE METHODS
-    public UserResponse getCurrentUserProfile(){
-        User currentUser = getAuthenticatedUser();
+    public UserResponse getCurrentUserProfile(User currentUser){
         return mapper.toResponse(currentUser);
     }
 
-    public UserResponse updateCurrentUserProfile(UserUpdateRequest request){
-        User user = getAuthenticatedUser();
-
+    public UserResponse updateCurrentUserProfile(UserUpdateRequest request, User user){
         if(request.email() != null && !request.email().equals(user.getEmail())){
             if(userRepository.existsByEmail(request.email())){
                 throw new ResourceAlreadyExistsException("Email already in use");
@@ -47,8 +40,7 @@ public class UserService {
         return mapper.toResponse(saved);
     }
 
-    public void disableCurrentUserProfile(){
-        User user = getAuthenticatedUser();
+    public void disableCurrentUserProfile(User user){
         user.setStatus(AccountStatus.DELETED);
         userRepository.save(user);
     }
@@ -102,18 +94,6 @@ public class UserService {
 
         user.setStatus(AccountStatus.DELETED);
         userRepository.save(user);
-    }
-
-
-    private User getAuthenticatedUser(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth == null || auth.getPrincipal() == null){
-            throw new UnauthorizedException("Invalid authentication context");
-        }
-
-        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-
-        return userDetails.getUser();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.leandro.shop.shared.security;
+package com.leandro.shop.shared.security.user;
 
 import com.leandro.shop.user.entity.AccountStatus;
 import com.leandro.shop.user.entity.User;

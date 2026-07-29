@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
@@ -20,5 +21,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @EntityGraph(attributePaths = {"images"})
     Page<Product> findBySeller(User seller, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"images"})
+    Optional<Product> findByIdWithImages(UUID id);
 
 }

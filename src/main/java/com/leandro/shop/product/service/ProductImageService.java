@@ -7,7 +7,10 @@ import com.leandro.shop.product.repository.ProductImageRepository;
 import com.leandro.shop.product.repository.ProductRepository;
 import com.leandro.shop.shared.cloudinary.CloudinaryService;
 import com.leandro.shop.shared.exceptions.BadRequestException;
+import com.leandro.shop.shared.exceptions.ForbiddenException;
 import com.leandro.shop.shared.exceptions.ResourceNotFoundException;
+import com.leandro.shop.user.entity.User;
+import com.leandro.shop.user.entity.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,9 +26,19 @@ public class ProductImageService {
     private final ProductImageRepository imageRepository;
     private final CloudinaryService cloudinaryService;
 
-    public List<ProductImageResponse> getProductImages(UUID productId){
-        Product product = productRepository.findById(productId)
+    public List<ProductImageResponse> getProductImages(UUID productId, User user){
+        Product product = productRepository.findByIdWithImages(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product not found"));
+
+        if(!product.getActive()){
+            boolean isAnonymous = (user == null);
+            boolean isOwner = !isAnonymous && product.getSeller().getId().equals(user.getId());
+            boolean isAdmin = !isAnonymous && user.getRole().equals(UserRole.ADMIN);
+            if (!isOwner && !isAdmin) {
+                throw new ResourceNotFoundException("Product not found");
+            }
+        }
+
         return product.getImages().stream()
                 .map(image ->
                         new ProductImageResponse(image.getId(), image.getImageUrl())

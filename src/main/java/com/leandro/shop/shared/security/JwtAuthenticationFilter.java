@@ -2,6 +2,7 @@ package com.leandro.shop.shared.security;
 
 import com.leandro.shop.auth.JwtService;
 import com.leandro.shop.shared.payload.ApiResponse;
+import com.leandro.shop.shared.security.user.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

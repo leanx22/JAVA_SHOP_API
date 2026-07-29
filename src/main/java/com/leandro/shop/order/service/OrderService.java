@@ -11,7 +11,7 @@ import com.leandro.shop.product.repository.ProductRepository;
 import com.leandro.shop.shared.exceptions.BadRequestException;
 import com.leandro.shop.shared.exceptions.ResourceNotFoundException;
 import com.leandro.shop.shared.exceptions.UnauthorizedException;
-import com.leandro.shop.shared.security.CustomUserDetails;
+import com.leandro.shop.shared.security.user.CustomUserDetails;
 import com.leandro.shop.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
