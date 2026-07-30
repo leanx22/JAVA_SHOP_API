@@ -1,6 +1,7 @@
 package com.leandro.shop.user.controller;
 
 import com.leandro.shop.shared.payload.AppResponse;
+import com.leandro.shop.shared.payload.PageResponse;
 import com.leandro.shop.user.dto.UserRegistrationByAdminRequest;
 import com.leandro.shop.user.dto.UserResponse;
 import com.leandro.shop.user.dto.UserUpdateByAdminRequest;
@@ -43,6 +44,22 @@ public class UserController {
                 AppResponse.success(
                         "User retrieved successfully",
                         userService.getUser(id)
+                )
+        );
+    }
+
+    @Operation(summary = "Get all users", description = "Retrieves all users details. Requires ADMIN authority.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
+    })
+    public ResponseEntity<AppResponse<PageResponse<UserResponse>>> getUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size
+    ){
+        return ResponseEntity.ok(
+                AppResponse.success(
+                        "Users retrieved successfully",
+                        userService.getUsers(page, size)
                 )
         );
     }

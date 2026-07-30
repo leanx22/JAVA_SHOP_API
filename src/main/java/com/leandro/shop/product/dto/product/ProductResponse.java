@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.leandro.shop.user.dto.UserShortResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Response object representing a product")
@@ -24,9 +25,8 @@ public record ProductResponse(
         Boolean active,
         @Schema(description = "List of images associated with the product")
         List<ProductImageResponse> images,
-        @Schema(description = "The unique identifier of the seller who owns the product", example = "123e4567-e89b-12d3-a456-426614174000")
-        @JsonProperty("seller_id")
-        UUID sellerId,
+        @Schema(description = "Seller id, first and last name")
+        UserShortResponse seller,
         @Schema(description = "The date and time when the product was last updated", example = "2023-10-27T10:00:00")
         @JsonProperty("updated_at")
         LocalDateTime updatedAt,

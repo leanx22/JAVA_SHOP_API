@@ -1,15 +1,20 @@
 package com.leandro.shop.user.service;
 
 import com.leandro.shop.shared.exceptions.*;
+import com.leandro.shop.shared.payload.PageResponse;
 import com.leandro.shop.user.dto.*;
 import com.leandro.shop.user.entity.AccountStatus;
 import com.leandro.shop.user.entity.User;
 import com.leandro.shop.user.mapper.UserMapper;
 import com.leandro.shop.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -55,6 +60,22 @@ public class UserService {
     }
 
     // ADMIN METHODS
+    public PageResponse<UserResponse> getUsers(int page, int size){
+        PageRequest request = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<User> userPage = userRepository.findAll(request);
+        List<UserResponse> userList = userPage.getContent().stream().map(mapper::toResponse).toList();
+
+        return new PageResponse<>(
+                userList,
+                userPage.getNumber(),
+                userPage.getSize(),
+                userPage.getTotalElements(),
+                userPage.getTotalPages(),
+                userPage.isLast()
+        );
+
+    }
+
     public UserResponse createUser(UserRegistrationByAdminRequest request){
 
         if(userRepository.existsByEmail(request.email())) {
