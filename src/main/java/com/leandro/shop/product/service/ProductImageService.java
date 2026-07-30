@@ -27,7 +27,7 @@ public class ProductImageService {
     private final CloudinaryService cloudinaryService;
 
     public List<ProductImageResponse> getProductImages(UUID productId, User user){
-        Product product = productRepository.findByIdWithImages(productId)
+        Product product = productRepository.findWithImagesById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product not found"));
 
         if(!product.getActive()){

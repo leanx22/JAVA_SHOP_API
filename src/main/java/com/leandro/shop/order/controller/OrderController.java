@@ -2,7 +2,7 @@ package com.leandro.shop.order.controller;
 
 import com.leandro.shop.order.dto.OrderCreationRequest;
 import com.leandro.shop.order.service.OrderService;
-import com.leandro.shop.shared.payload.ApiResponse;
+import com.leandro.shop.shared.payload.AppResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class OrderController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UUID>> createOrder(
+    public ResponseEntity<AppResponse<UUID>> createOrder(
             @Valid @RequestBody OrderCreationRequest request
     ){
 
@@ -36,7 +36,7 @@ public class OrderController {
 
         return ResponseEntity
                 .created(location)
-                .body(ApiResponse.success("Order created successfully (Pending Payment)", orderUUID));
+                .body(AppResponse.success("Order created successfully (Pending Payment)", orderUUID));
     }
 
 }

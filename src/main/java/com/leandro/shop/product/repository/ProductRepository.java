@@ -23,6 +23,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     Page<Product> findBySeller(User seller, Pageable pageable);
 
     @EntityGraph(attributePaths = {"images"})
-    Optional<Product> findByIdWithImages(UUID id);
+    Optional<Product> findWithImagesById(UUID id);
 
 }

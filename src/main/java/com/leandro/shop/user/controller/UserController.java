@@ -1,6 +1,6 @@
 package com.leandro.shop.user.controller;
 
-import com.leandro.shop.shared.payload.ApiResponse;
+import com.leandro.shop.shared.payload.AppResponse;
 import com.leandro.shop.user.dto.UserRegistrationByAdminRequest;
 import com.leandro.shop.user.dto.UserResponse;
 import com.leandro.shop.user.dto.UserUpdateByAdminRequest;
@@ -15,6 +15,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Users", description = "User management for admins")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -23,20 +30,30 @@ public class UserController {
     private final UserService userService;
 
 
+    @Operation(summary = "Get a user by ID", description = "Retrieves user details. Requires ADMIN authority.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponse>> getUser(
+    public ResponseEntity<AppResponse<UserResponse>> getUser(
             @PathVariable UUID id
     ){
         return ResponseEntity.ok(
-                ApiResponse.success(
+                AppResponse.success(
                         "User retrieved successfully",
                         userService.getUser(id)
                 )
         );
     }
 
+    @Operation(summary = "Create a new user", description = "Creates a new user by an admin.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content)
+    })
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(
+    public ResponseEntity<AppResponse<UserResponse>> createUser(
             @Valid @RequestBody UserRegistrationByAdminRequest request
     ){
         UserResponse response = userService.createUser(request);
@@ -50,10 +67,15 @@ public class UserController {
         return ResponseEntity
                 .created(location)
                 .body(
-                        ApiResponse.success("User created successfully", response)
+                        AppResponse.success("User created successfully", response)
                 );
     }
 
+    @Operation(summary = "Soft delete a user", description = "Soft deletes a user by ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserSoft(
             @PathVariable UUID id
@@ -62,13 +84,19 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Update a user", description = "Updates a user by ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+    })
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponse>> patchUser(
+    public ResponseEntity<AppResponse<UserResponse>> patchUser(
             @PathVariable UUID id,
             @Valid @RequestBody UserUpdateByAdminRequest request
             ){
         return ResponseEntity.ok(
-                ApiResponse.success(
+                AppResponse.success(
                         "User updated successfully",
                         userService.updateUser(id, request)
                 )

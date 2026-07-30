@@ -1,7 +1,7 @@
 package com.leandro.shop.shared.security;
 
 import com.leandro.shop.auth.JwtService;
-import com.leandro.shop.shared.payload.ApiResponse;
+import com.leandro.shop.shared.payload.AppResponse;
 import com.leandro.shop.shared.security.user.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -92,10 +92,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        ApiResponse<Object> apiResponse = ApiResponse.error(message);
+        AppResponse<Object> appResponse = AppResponse.error(message);
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getWriter(), apiResponse);
+        mapper.writeValue(response.getWriter(), appResponse);
     }
 
 }
