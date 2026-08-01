@@ -108,6 +108,7 @@ Desktop.ini
 !.env.example
 
 # Spring configuration containing secrets
+application.properties
 application-local.properties
 application-local.yml
 application-secret.properties
