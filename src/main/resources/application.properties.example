@@ -18,7 +18,6 @@ spring.datasource.driver-class-name=
 # ==============================================================
 # JPA & HIBERNATE CONFIGURATION
 # ==============================================================
-# IMPORTANTE: En producción debe ser 'validate' o 'none', y se usan herramientas como Flyway.
 spring.jpa.hibernate.ddl-auto=
 spring.jpa.show-sql=
 spring.jpa.properties.hibernate.format_sql=
