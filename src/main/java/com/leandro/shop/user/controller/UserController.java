@@ -52,6 +52,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
     })
+    @GetMapping
     public ResponseEntity<AppResponse<PageResponse<UserResponse>>> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size

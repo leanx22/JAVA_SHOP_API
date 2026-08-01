@@ -4,6 +4,7 @@ import com.leandro.shop.shared.payload.AppResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,10 +31,8 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .orElse("Validation failed");
 
-        // Usamos tu clase ApiResponse
         AppResponse<Void> response = AppResponse.error(errorMessage);
 
-        // Devolvemos un 400 Bad Request
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 

@@ -9,6 +9,8 @@ import com.leandro.shop.user.entity.UserRole;
 import com.leandro.shop.user.mapper.UserMapper;
 import com.leandro.shop.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +21,6 @@ import java.util.HashMap;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
     private final UserRepository userRepository;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
@@ -53,8 +54,13 @@ public class AuthService {
                 .orElseThrow(()->new UnauthorizedException("Bad credentials")
                 );
 
+        if(user.getStatus() != AccountStatus.ACTIVE){
+            throw new UnauthorizedException("Your account is "+user.getStatus().name());
+        }
+
         boolean isPasswordCorrect = encoder.matches(request.password(), user.getPassword());
         if(!isPasswordCorrect) throw new UnauthorizedException("Bad credentials");
+
 
         HashMap<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("user_role", user.getRole());
